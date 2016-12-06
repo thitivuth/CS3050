@@ -64,7 +64,7 @@ int generateMap(int width, int height);
  * to add a vertex with a key that matches a vertex
  * already in the graph.
  */
-int addVertex(int i, j);
+int addVertex(int i, int j);
 
 
 /* Add an edge between two vertices

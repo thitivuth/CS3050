@@ -11,7 +11,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "input_error.h"
 #include "abstractGraph.h"
 
 
@@ -131,7 +130,7 @@ int generateMap(int width, int height)
  * to add a vertex with a key that matches a vertex
  * already in the graph.
  */
-int addVertex(int i, j)
+int addVertex(int i, int j)
   {
   int bOk = 1;
 
@@ -143,7 +142,8 @@ int addVertex(int i, j)
     }
   else
     {
-    pNewVtx->key = key;
+    pNewVtx->i = i;
+    pNewVtx->j = j;
     if (vListHead == NULL)  /* first vertex */
        {
        vListHead = pNewVtx;
@@ -246,7 +246,7 @@ int addEdge(int i1, int j1, int i2, int j2)
       {
       /* Add link */
       ADJACENT_T * pNewRef = (ADJACENT_T*) calloc(1,sizeof(ADJACENT_T));
-      ADJACENT_T * pPrevNewRef = NULL;
+      
       if (pNewRef == NULL)
         {
         bOk = -3;
@@ -254,8 +254,6 @@ int addEdge(int i1, int j1, int i2, int j2)
       else
         {
         pNewRef->pVertex = pToVtx;
-        pNewRef->weight = weight;
-        pPrevNewRef = pFromVtx->adjacentTail;
 
         if (pFromVtx->adjacentTail != NULL)
           {
@@ -269,7 +267,7 @@ int addEdge(int i1, int j1, int i2, int j2)
         }
 
       ADJACENT_T * pNewRef2 = (ADJACENT_T*) calloc(1,sizeof(ADJACENT_T));
-      ADJACENT_T * pPrevNewRef2 = NULL;
+      
       if (pNewRef2 == NULL)
         {
         bOk = -3;
@@ -277,8 +275,6 @@ int addEdge(int i1, int j1, int i2, int j2)
       else
         {
         pNewRef2->pVertex = pFromVtx;
-        pNewRef2->weight = weight;
-        pPrevNewRef2 = pToVtx->adjacentTail;
 
         if (pToVtx->adjacentTail != NULL)
           {
