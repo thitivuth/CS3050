@@ -9,18 +9,18 @@
 
 typedef struct _obj
   {
-    int xMove;                        
-    int yMove;                        
-    int speed;
-    void * location;
+  int iMove;
+  int jMove;
+  int speed;
+  void* locationVertex;
   } OBJ_T;
 
 OBJ_T obstacleOne;
 OBJ_T obstacleTwo;
 
-void obstacleNewLocation(OBJ_T * obstacle, int i, int j);
+void obstacleSetLocation(OBJ_T * obstacle, int i, int j);
 
-void moveObstacle(OBJ_T * Obstacle);
+void moveObstacle(OBJ_T * obstacle);
 
 void robotNewLocation(int i, int j);
 

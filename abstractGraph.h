@@ -94,6 +94,8 @@ int addEdge(int i1, int j1, int i2, int j2);
  */
 void * findVertexByKey(int i, int j);
 
+void printAllVertex();
+
 void printAllEdge();
 
 VERTEX_T * nextVertexShortestPath(VERTEX_T* pEndVertex);

@@ -340,7 +340,7 @@ void printPath(VERTEX_T* pEndVertex)
     /* Now start at the end of the array to print the path */
     for (i = pathCount-1; i >= 0; i--)
       {
-      printf(" %d,%d ",pathVertices[i]->i,pathVertices[i]->j);
+      printf(" %d,%d ",pathVertices[i]->i+1,pathVertices[i]->j+1);
       if (i > 0)
         printf("==>");
       } 
@@ -348,7 +348,18 @@ void printPath(VERTEX_T* pEndVertex)
     free(pathVertices);
     }
   }
-  
+
+void printAllVertex()
+  {
+  VERTEX_T* pCurrent = vListHead;
+
+  while(pCurrent != NULL)
+    {
+    printf("(%d,%d)\n",pCurrent->i,pCurrent->j);
+    pCurrent = pCurrent->next;
+    }
+  }
+
 void printAllEdge()
   {
   VERTEX_T* pCurrent = vListHead;
@@ -404,13 +415,21 @@ VERTEX_T * nextVertexShortestPath(VERTEX_T* pEndVertex)
 VERTEX_T * reachablePath(VERTEX_T * pStartVertex, VERTEX_T * pEndVertex)
   {
   VERTEX_T * pAdjacent = NULL;
-  VERTEX_T * temp = NULL;
+  VERTEX_T * obOne = NULL;
+  VERTEX_T * obTwo = NULL;
+  VERTEX_T * returnVertex = NULL;
   queueClear();
   colorAll(WHITE);
-  temp = obstacleOne.location;
-  temp->color = BLACK;
-  temp = obstacleTwo.location;
-  temp->color = BLACK;
+
+  obOne = (VERTEX_T *) obstacleOne.locationVertex;
+  obOne->color = BLACK;
+  obTwo = (VERTEX_T *) obstacleTwo.locationVertex;
+  obTwo->color = BLACK;
+
+  if(pEndVertex->color == BLACK)
+    {
+    pEndVertex->color = WHITE;
+    }
 
   enqueue(pStartVertex);
   pStartVertex->count = 0;
@@ -437,7 +456,14 @@ VERTEX_T * reachablePath(VERTEX_T * pStartVertex, VERTEX_T * pEndVertex)
       }
     }
 
-  printf("Path from %d,%d to %d,%d:\n",pStartVertex->i,pStartVertex->j,pEndVertex->i,pEndVertex->j); 
+  printf("Path from %d,%d to %d,%d:\n",pStartVertex->i+1,pStartVertex->j+1,pEndVertex->i+1,pEndVertex->j+1); 
   printPath(pEndVertex);
-  return nextVertexShortestPath(pEndVertex);
+  returnVertex = nextVertexShortestPath(pEndVertex);
+  
+  if(returnVertex == obOne || returnVertex == obTwo)
+    {
+    returnVertex = pStartVertex;
+    }
+
+  return returnVertex;
   }

@@ -27,7 +27,6 @@ int main(int argc, char const *argv[])
 	obstacleTwo.speed = 1;
 	obstacleNewLocation(&obstacleTwo,3,1);
 	
-	printf("Time %d : Robot(%d,%d) Obstacle1(%d,%d) Obstacle2(%d,%d)\n\n",count,robotLocation->i,robotLocation->j,obOneI,obOneJ,obTwoI,obTwoJ);
 	while(robotLocation != to)
 		{
 		VERTEX_T * obOne = NULL;
