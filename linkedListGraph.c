@@ -344,6 +344,7 @@ void printPath(VERTEX_T* pEndVertex)
     free(pathVertices);
     }
   }
+  
 void printAllEdge()
   {
   VERTEX_T* pCurrent = vListHead;
@@ -363,8 +364,8 @@ void printAllEdge()
     printf("\n");
     pCurrent = pCurrent->next;
     }
-
   }
+
 void reachablePath(VERTEX_T * pStartVertex, VERTEX_T * pEndVertex)
   {
   VERTEX_T * pAdjacent = NULL;
