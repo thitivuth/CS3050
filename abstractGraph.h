@@ -27,7 +27,7 @@ typedef struct _vertex
     int j;                        /* key j for this vertex */
     int color;                    /* used to mark nodes as visited */
     int count;
-    struct _vertex * previous;
+    struct _vertex * pFrom;
     struct _vertex * next;        /* next vertex in the list */
     ADJACENT_T * adjacentHead;    /* pointer to the head of the adjacent vertices list */
     ADJACENT_T * adjacentTail;    /* pointer to the tail of the adjacent vertices list */
@@ -92,5 +92,5 @@ int addEdge(int i1, int j1, int i2, int j2);
  */
 void * findVertexByKey(int i, int j);
 
-
+void reachablePath(VERTEX_T * pStartVertex, VERTEX_T * pEndVertex);
 #endif

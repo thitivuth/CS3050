@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "abstractGraph.h"
+#include "abstractQueue.h"
 
 
 VERTEX_T * vListHead = NULL;  /* head of the vertex list */
@@ -154,7 +155,8 @@ int addVertex(int i, int j)
   int bOk = 1;
 
   VERTEX_T * pNewVtx = (VERTEX_T *) calloc(1,sizeof(VERTEX_T));
-
+  pNewVtx->count = 0;
+  
   if (pNewVtx == NULL)
     {
     bOk = 0;  /* allocation error */
@@ -309,4 +311,68 @@ int addEdge(int i1, int j1, int i2, int j2)
       }
     } 
   return bOk;
+  }
+
+
+void printPath(VERTEX_T* pEndVertex)
+  {
+  VERTEX_T** pathVertices = calloc(vertexCount,sizeof(VERTEX_T*));
+    /* this array is big enough to hold all the vertices we have */
+  int pathCount = 0;
+  if (pathVertices == NULL) 
+    {
+    printf("Allocation error at printPath\n");
+    }
+  else
+    {
+    int i = 0;
+    VERTEX_T * pCurrent = pEndVertex;
+    while (pCurrent != NULL)  /* traverse the pFrom links */
+      {
+      pathVertices[pathCount] = pCurrent;
+      pathCount++;
+      pCurrent = pCurrent->pFrom;
+      }
+    /* Now start at the end of the array to print the path */
+    for (i = pathCount-1; i >= 0; i--)
+      {
+      printf(" %d,%d ",pathVertices[i]->i,pathVertices[i]->j);
+      if (i > 0)
+        printf("==>");
+      } 
+    printf("\n");
+    free(pathVertices);
+    }
+  }
+
+void reachablePath(VERTEX_T * pStartVertex, VERTEX_T * pEndVertex)
+  {
+  VERTEX_T * pDummy = NULL;
+  VERTEX_T * pAdjacent = NULL;
+
+  queueClear();
+  colorAll(WHITE);
+  enqueue(pStartVertex);
+  while (queueSize() > 0)
+    {
+    VERTEX_T* pCurrent = (VERTEX_T*) dequeue();
+    if (pCurrent->color != BLACK)
+      {
+      pCurrent->color = BLACK;
+      ADJACENT_T* pRef = pCurrent->adjacentHead;
+      while (pRef != NULL)
+        {
+        pAdjacent = (VERTEX_T*) pRef->pVertex;
+        if (pAdjacent->color != BLACK)
+          {
+          pAdjacent->pFrom = pCurrent;
+          enqueue(pAdjacent);
+          }
+        pRef = pRef->next;
+        }
+      }
+    }
+
+  printf("Path from %d,%d to %d,%d:\n",pStartVertex->i,pStartVertex->j,pEndVertex->i,pEndVertex->j); 
+  printPath(pEndVertex);
   }
