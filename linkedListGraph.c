@@ -18,6 +18,7 @@
 
 VERTEX_T * vListHead = NULL;  /* head of the vertex list */
 VERTEX_T * vListTail = NULL;  /* tail of the vertex list */
+
 int vertexCount = 0;          /* keep track of the number of vertices */
 
 /* Free the adjacencyList for a vertex 
@@ -65,6 +66,8 @@ void colorAll(int color)
   while (pVertex != NULL)
      {
      pVertex->color = color;
+     pVertex->count = 99999;
+     pVertex->pFrom = NULL;
      pVertex = pVertex->next;
      }
   }
@@ -370,13 +373,14 @@ void printAllEdge()
 VERTEX_T * nextVertexShortestPath(VERTEX_T* pEndVertex)
   {
   VERTEX_T * pNext = NULL;
-  VERTEX_T** pathVertices = calloc(vertexCount,sizeof(VERTEX_T*));
+  VERTEX_T** pathVertices = NULL;
+  pathVertices = calloc(vertexCount,sizeof(VERTEX_T*));
     /* this array is big enough to hold all the vertices we have */
   int pathCount = 0;
   if (pathVertices == NULL) 
     {
     printf("Allocation error at printPath\n");
-    exit();
+    exit(0);
     }
   else
     {
@@ -390,7 +394,7 @@ VERTEX_T * nextVertexShortestPath(VERTEX_T* pEndVertex)
       pCurrent = pCurrent->pFrom;
       }
 
-    pNext = pathVertices[pathCount-1];
+    pNext = pathVertices[pathCount-2];
     free(pathVertices);
     }
 
@@ -403,7 +407,6 @@ VERTEX_T * reachablePath(VERTEX_T * pStartVertex, VERTEX_T * pEndVertex)
   VERTEX_T * temp = NULL;
   queueClear();
   colorAll(WHITE);
-  
   temp = obstacleOne.location;
   temp->color = BLACK;
   temp = obstacleTwo.location;
@@ -434,7 +437,7 @@ VERTEX_T * reachablePath(VERTEX_T * pStartVertex, VERTEX_T * pEndVertex)
       }
     }
 
-  //printf("Path from %d,%d to %d,%d:\n",pStartVertex->i,pStartVertex->j,pEndVertex->i,pEndVertex->j); 
-  //printPath(pEndVertex);
+  printf("Path from %d,%d to %d,%d:\n",pStartVertex->i,pStartVertex->j,pEndVertex->i,pEndVertex->j); 
+  printPath(pEndVertex);
   return nextVertexShortestPath(pEndVertex);
   }

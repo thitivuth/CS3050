@@ -17,7 +17,7 @@ void obstacleNewLocation(OBJ_T * obstacle, int i, int j)
   else
   	{
   	printf("Error at obstacleNewLocation\n");
-  	exit();
+  	exit(0);
   	}
 	}
 
@@ -27,9 +27,10 @@ void moveObstacle(OBJ_T * obstacle)
   int newJ = 0;
   int overflow = 0;
   VERTEX_T * newLocation = NULL;
+  VERTEX_T * obstacleLocation = (VERTEX_T *) obstacle->location;
 
-  newI = (obstacle->speed * obstacle->yMove) + obstacle->location->i;
-  newJ = (obstacle->speed * obstacle->xMove) + obstacle->location->j;
+  newI = (obstacle->speed * obstacle->yMove) + obstacleLocation->i;
+  newJ = (obstacle->speed * obstacle->xMove) + obstacleLocation->j;
 
   if(newI == maxHeight || newI == 0)
   	{
@@ -79,12 +80,12 @@ void robotNewLocation(int i, int j)
 
   if(newLocation != NULL)
   	{
-  	robot = newLocation;
+  	robotLocation = newLocation;
   	}
   else
   	{
   	printf("Error at robotNewLocation\n");
-  	exit();
+  	exit(0);
   	}
 	}
 

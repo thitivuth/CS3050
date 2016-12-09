@@ -36,6 +36,7 @@ typedef struct _vertex
 
 int maxWidth;
 int maxHeight;
+VERTEX_T* robotLocation;
 
 /* Free all memory associated with the graph and
  * reset all parameters.
