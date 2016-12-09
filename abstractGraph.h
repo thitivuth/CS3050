@@ -26,10 +26,15 @@ typedef struct _vertex
     int i;                        /* key i for this vertex */
     int j;                        /* key j for this vertex */
     int color;                    /* used to mark nodes as visited */
+    int count;
+    struct _vertex * previous;
     struct _vertex * next;        /* next vertex in the list */
     ADJACENT_T * adjacentHead;    /* pointer to the head of the adjacent vertices list */
     ADJACENT_T * adjacentTail;    /* pointer to the tail of the adjacent vertices list */
   } VERTEX_T;
+
+int maxWidth;
+int maxHeight;
 
 /* Free all memory associated with the graph and
  * reset all parameters.

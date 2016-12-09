@@ -17,8 +17,6 @@
 VERTEX_T * vListHead = NULL;  /* head of the vertex list */
 VERTEX_T * vListTail = NULL;  /* tail of the vertex list */
 int vertexCount = 0;          /* keep track of the number of vertices */
-int bDagGraph = 1;
-
 
 /* Free the adjacencyList for a vertex 
  * Argument
@@ -87,9 +85,14 @@ int generateMap(int width, int height)
   int i;
   int j;
   int bOk;
+  int count = 0;
+  
+  maxWidth = width-1;
+  maxHeight = height-1;
+
   for(i=0; i<height; i++)
     {
-    for(j=0; j<width; i++)
+    for(j=0; j<width; j++)
       {
       bOk = addVertex(i,j);
       if(bOk != 1)
@@ -98,22 +101,38 @@ int generateMap(int width, int height)
     }
   for(i=0; i<height; i++)
     {
-    for(j=0; j<width; i++)
+    for(j=0; j<width; j++)
       {
       if(j+1 < width)
         {
         bOk = addEdge(i,j,i,j+1);
+        count++;
         if(bOk != 1)
           return bOk;      
         }
       if(i+1 < height)
         {
         bOk = addEdge(i,j,i+1,j);
+        count++;
         if(bOk != 1)
           return bOk;              
         }
+      if(i+1 < height && j+1 < width)
+        {
+        bOk = addEdge(i,j,i+1,j+1);
+        count++;
+        if(bOk != 1)
+          return bOk;         
+        }
+      if(i+1 < height && j-1 >= 0)
+        {
+        bOk = addEdge(i,j,i+1,j-1);
+        count++;
+        if(bOk != 1)
+          return bOk;         
+        }        
       }
-    }    
+    }
   return bOk;
   }
 
@@ -228,7 +247,7 @@ int addEdge(int i1, int j1, int i2, int j2)
   {
   int bOk = 1;
 
-  VERTEX_T * pFromVtx = (VERTEX_T *) findVertexByKey(i1, j2);
+  VERTEX_T * pFromVtx = (VERTEX_T *) findVertexByKey(i1, j1);
   VERTEX_T * pToVtx = (VERTEX_T *) findVertexByKey(i2, j2);
 
   /* If both vertex not exist */
