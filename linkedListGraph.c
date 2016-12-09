@@ -155,8 +155,8 @@ int addVertex(int i, int j)
   int bOk = 1;
 
   VERTEX_T * pNewVtx = (VERTEX_T *) calloc(1,sizeof(VERTEX_T));
-  pNewVtx->count = 0;
-  
+  pNewVtx->count = 99999;
+
   if (pNewVtx == NULL)
     {
     bOk = 0;  /* allocation error */
@@ -344,28 +344,54 @@ void printPath(VERTEX_T* pEndVertex)
     free(pathVertices);
     }
   }
+void printAllEdge()
+  {
+  VERTEX_T* pCurrent = vListHead;
+  ADJACENT_T* pRef;
+  VERTEX_T * pAdjacent = NULL;
 
+  while(pCurrent != NULL)
+    {
+    pRef = pCurrent->adjacentHead;
+    printf("(%d,%d) -> ",pCurrent->i,pCurrent->j);
+    while(pRef != NULL)
+      {
+      pAdjacent = (VERTEX_T *) pRef->pVertex;
+      printf("(%d,%d), ",pAdjacent->i,pAdjacent->j);
+      pRef = pRef->next;
+      }
+    printf("\n");
+    pCurrent = pCurrent->next;
+    }
+
+  }
 void reachablePath(VERTEX_T * pStartVertex, VERTEX_T * pEndVertex)
   {
-  VERTEX_T * pDummy = NULL;
   VERTEX_T * pAdjacent = NULL;
 
   queueClear();
   colorAll(WHITE);
   enqueue(pStartVertex);
+  pStartVertex->count = 0;
+
   while (queueSize() > 0)
     {
     VERTEX_T* pCurrent = (VERTEX_T*) dequeue();
     if (pCurrent->color != BLACK)
       {
       pCurrent->color = BLACK;
+      pCurrent->count = pCurrent->count+1;
       ADJACENT_T* pRef = pCurrent->adjacentHead;
       while (pRef != NULL)
         {
         pAdjacent = (VERTEX_T*) pRef->pVertex;
         if (pAdjacent->color != BLACK)
           {
-          pAdjacent->pFrom = pCurrent;
+          if(pCurrent->count+1 < pAdjacent->count)
+            {
+            pAdjacent->count = pCurrent->count+1;
+            pAdjacent->pFrom = pCurrent;
+            }
           enqueue(pAdjacent);
           }
         pRef = pRef->next;
