@@ -13,6 +13,7 @@
 #include <string.h>
 #include "abstractGraph.h"
 #include "abstractQueue.h"
+#include "abstractRobot.h"
 
 
 VERTEX_T * vListHead = NULL;  /* head of the vertex list */
@@ -366,40 +367,74 @@ void printAllEdge()
     }
   }
 
-void reachablePath(VERTEX_T * pStartVertex, VERTEX_T * pEndVertex)
+VERTEX_T * nextVertexShortestPath(VERTEX_T* pEndVertex)
+  {
+  VERTEX_T * pNext = NULL;
+  VERTEX_T** pathVertices = calloc(vertexCount,sizeof(VERTEX_T*));
+    /* this array is big enough to hold all the vertices we have */
+  int pathCount = 0;
+  if (pathVertices == NULL) 
+    {
+    printf("Allocation error at printPath\n");
+    exit();
+    }
+  else
+    {
+    int i = 0;
+    VERTEX_T * pCurrent = pEndVertex;
+
+    while (pCurrent != NULL)  /* traverse the pFrom links */
+      {
+      pathVertices[pathCount] = pCurrent;
+      pathCount++;
+      pCurrent = pCurrent->pFrom;
+      }
+
+    pNext = pathVertices[pathCount-1];
+    free(pathVertices);
+    }
+
+  return pNext;
+  }
+
+VERTEX_T * reachablePath(VERTEX_T * pStartVertex, VERTEX_T * pEndVertex)
   {
   VERTEX_T * pAdjacent = NULL;
-
+  VERTEX_T * temp = NULL;
   queueClear();
   colorAll(WHITE);
+  
+  temp = obstacleOne.location;
+  temp->color = BLACK;
+  temp = obstacleTwo.location;
+  temp->color = BLACK;
+
   enqueue(pStartVertex);
   pStartVertex->count = 0;
 
   while (queueSize() > 0)
     {
     VERTEX_T* pCurrent = (VERTEX_T*) dequeue();
-    if (pCurrent->color != BLACK)
+    pCurrent->color = BLACK;
+    pCurrent->count = pCurrent->count+1;
+    ADJACENT_T* pRef = pCurrent->adjacentHead;
+    while (pRef != NULL)
       {
-      pCurrent->color = BLACK;
-      pCurrent->count = pCurrent->count+1;
-      ADJACENT_T* pRef = pCurrent->adjacentHead;
-      while (pRef != NULL)
+      pAdjacent = (VERTEX_T*) pRef->pVertex;
+      if (pAdjacent->color != BLACK)
         {
-        pAdjacent = (VERTEX_T*) pRef->pVertex;
-        if (pAdjacent->color != BLACK)
+        if(pCurrent->count+1 < pAdjacent->count)
           {
-          if(pCurrent->count+1 < pAdjacent->count)
-            {
-            pAdjacent->count = pCurrent->count+1;
-            pAdjacent->pFrom = pCurrent;
-            }
-          enqueue(pAdjacent);
+          pAdjacent->count = pCurrent->count+1;
+          pAdjacent->pFrom = pCurrent;
           }
-        pRef = pRef->next;
+        enqueue(pAdjacent);
         }
+      pRef = pRef->next;
       }
     }
 
-  printf("Path from %d,%d to %d,%d:\n",pStartVertex->i,pStartVertex->j,pEndVertex->i,pEndVertex->j); 
-  printPath(pEndVertex);
+  //printf("Path from %d,%d to %d,%d:\n",pStartVertex->i,pStartVertex->j,pEndVertex->i,pEndVertex->j); 
+  //printPath(pEndVertex);
+  return nextVertexShortestPath(pEndVertex);
   }

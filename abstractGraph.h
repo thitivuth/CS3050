@@ -95,5 +95,8 @@ void * findVertexByKey(int i, int j);
 
 void printAllEdge();
 
-void reachablePath(VERTEX_T * pStartVertex, VERTEX_T * pEndVertex);
+VERTEX_T * nextVertexShortestPath(VERTEX_T* pEndVertex);
+
+VERTEX_T * reachablePath(VERTEX_T * pStartVertex, VERTEX_T * pEndVertex);
+
 #endif
