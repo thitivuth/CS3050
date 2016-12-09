@@ -10,6 +10,7 @@ int main(int argc, char const *argv[])
 	generateMap(5,5);
 
 	int count  = 0;
+	int obOneI,obOneJ,obTwoI,obTwoJ;
 
 	VERTEX_T * from = findVertexByKey(4,3);
 	VERTEX_T * to = findVertexByKey(0,2);
@@ -29,7 +30,6 @@ int main(int argc, char const *argv[])
 	printf("Time %d : Robot(%d,%d) Obstacle1(%d,%d) Obstacle2(%d,%d)\n\n",count,robotLocation->i,robotLocation->j,obOneI,obOneJ,obTwoI,obTwoJ);
 	while(robotLocation != to)
 		{
-		int obOneI,obOneJ,obTwoI,obTwoJ;
 		VERTEX_T * obOne = NULL;
 		VERTEX_T * obTwo = NULL;
 
